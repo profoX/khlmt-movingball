@@ -56,7 +56,7 @@
 				dy = acceleration.y;
 				ball.x += dx;
 				ball.y += dy;
-				draw();
+				//draw();
 			}
 			
 			function draw() {
@@ -106,7 +106,7 @@
 					color2: 'rgba(0, 255, 0, 255)'
 				};
 				
-				window.setInterval(updateScene, 1000 / FRAMERATE);
+				window.setInterval(draw, 1000 / FRAMERATE);
 			});
 		</script>
 	</head>
