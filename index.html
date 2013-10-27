@@ -1,14 +1,45 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="utf-8">
+		<meta charset="utf-8" />
+		<meta name="viewport" id="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
 		<title>Moving Ball</title>
 		<!--<link rel="stylesheet" type="text/css" href="movingball.css">
 		<script src="movingball.js"></script>-->
+		<style>
+			html, body {
+				width: 100%;
+				height: 100%;
+				background: yellow;
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
+			
+			canvas {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+			}
+		</style>
+		<script>
+			function onSuccess(acceleration) {
+				alert('Acceleration X: ' + acceleration.x + '\n' +
+					'Acceleration Y: ' + acceleration.y + '\n' +
+					'Acceleration Z: ' + acceleration.z + '\n' +
+					'Timestamp: '      + acceleration.timestamp + '\n');
+			};
+
+			function onError() {
+				alert('onError!');
+			};
+
+			navigator.accelerometer.getCurrentAcceleration(onSuccess, onError);
+		</script>
 	</head>
 	<body>
-		<h1>test</h1>
-		<canvas style="background: red;" id="surface" width="400" height="400"></canvas>
+		<canvas style="background: red;" id="surface"></canvas>
 	</body>
 </html>
 
