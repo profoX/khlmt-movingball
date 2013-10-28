@@ -64,7 +64,7 @@
 					color2: 'rgba(0, 255, 0, 255)'
 				};
 				
-				window.setInterval(draw, 1000 / FRAMERATE);
+				//window.setInterval(draw, 1000 / FRAMERATE);
 				init = true;
 			}
 
@@ -81,16 +81,16 @@
 				//alert('onError!');
 			}
 			
-			/*function updateScene(acceleration) {
+			function updateScene(acceleration) {
 				if (!init)
 					return;
 				
 				dx = acceleration.x;
 				dy = acceleration.y;
-				//ball.x += dx;
-				//ball.y += dy;
-				//draw();
-			}*/
+				ball.x += dx;
+				ball.y += dy;
+				draw();
+			}
 			
 			function draw() {
 				//console.log("draw");
