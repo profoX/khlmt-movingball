@@ -2,7 +2,7 @@ var FRAMERATE = 40;
 var canvasWidth, canvasHeight;
 var canvas, ball, hole;
 var dx, dy;
-var sx = 5, sy = 5;
+var sx = 4, sy = 4;
 var seconds = 0;
 var init = false;
 var running = false;
