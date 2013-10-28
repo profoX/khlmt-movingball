@@ -29,13 +29,14 @@
 			var canvasWidth, canvasHeight;
 			var canvas, ball, hole;
 			var dx, dy;
+			var init = false;
 		
 			// Wait for device API libraries to load
 			document.addEventListener("deviceready", onDeviceReady, false);
 
 			// device APIs are available
 			function onDeviceReady() {
-				var watchID = navigator.accelerometer.watchAcceleration(updateScene, onError, {frequency: 1000 / FRAMERATE});
+				//var watchID = navigator.accelerometer.watchAcceleration(updateScene, onError, {frequency: 1000 / FRAMERATE});
 			}
 
 			// onSuccess: Get a snapshot of the current acceleration
@@ -52,6 +53,9 @@
 			}
 			
 			function updateScene(acceleration) {
+				if (!init)
+					return;
+				
 				dx = acceleration.x;
 				dy = acceleration.y;
 				//ball.x += dx;
@@ -107,6 +111,7 @@
 				};
 				
 				window.setInterval(draw, 1000 / FRAMERATE);
+				init = true;
 			});
 		</script>
 	</head>
