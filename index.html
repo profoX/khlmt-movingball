@@ -11,26 +11,67 @@
 			html, body {
 				width: 100%;
 				height: 100%;
-				background: red;
+				background: black;
 				margin: 0;
 				padding: 0;
 				position: relative;
+				font-family: sans-serif;
+			}
+			
+			#timer {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 30px;
+				
+				background: #5F91CC;
+				border-radius: 10px;
+				border: 5px solid #385D89;
+				padding: 5px;
+				font-size: 26px;
+				text-align: center;
 			}
 			
 			canvas {
 				position: absolute;
 				left: 0;
 				right: 0;
-				top: 0;
-				bottom: 100px;
+				top: 50px;
+				bottom: 50px;
 				margin: 0;
 				padding: 0;
-				background: yellow;
+				background: #D3E5AB;
+				border-radius: 10px;
+				border: 5px solid #77923B;
 			}
 			
 			#buttons {
 				position: absolute;
 				bottom: 0;
+				width: 100%;
+				margin: 0;
+				padding: 0;
+			}
+			
+			input {
+				width: 33.33%;
+				margin: 0;
+				height: 40px;
+				
+				background: #5F91CC;
+				border-radius: 10px;
+				border: 5px solid #385D89;
+				padding: 5px;
+				font-size: 17px;
+				text-align: center;
+				cursor: pointer;
+			}
+			
+			input:hover {
+				background: #385D89;
+				border: 5px solid #5F91CC;
+				color: white;
 			}
 		</style>
 		<script>
@@ -39,7 +80,24 @@
 			var canvas, ball, hole;
 			var dx, dy;
 			var sx = 5, sy = 5;
+			var seconds = 0;
 			var init = false;
+			var running = false;
+			var complete = false;
+			var timer = false;
+			var timerMs = 0;
+			
+			// Modified version (removed hours) from http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-with-format-hhmmss
+			String.prototype.toMMSS = function () {
+				var sec_num = parseInt(this, 10); // don't forget the second parm
+				var minutes = Math.floor(sec_num / 60);
+				var seconds = sec_num - minutes * 60;
+
+				if (minutes < 10) {minutes = "0" + minutes;}
+				if (seconds < 10) {seconds = "0" + seconds;}
+				var time = minutes + ':' + seconds;
+				return time;
+			}
 		
 			// Wait for device API libraries to load
 			document.addEventListener("deviceready", onDeviceReady, false);
@@ -49,7 +107,7 @@
 				//alert("dom ready");
 				canvas = $("canvas")[0];
 				//alert("there");
-				canvas.width = $(window).width();
+				canvas.width = $(window).width() - 10;
 				canvas.height = $(window).height() - 100;
 				//alert("foo");
 				canvasWidth = canvas.width;
@@ -60,23 +118,90 @@
 					radius: radius,
 					x: Math.round(canvasWidth / 2),
 					y: Math.round(canvasHeight / 2),
-					color: 'rgba(0, 255, 0, 255)',
-					color2: 'rgba(0, 0, 255, 255)'
+					color: '#5F91CC',
+					color2: '#385D89'
 				};
-				radius = canvasHeight / 50 + 10;
+				radius = canvasHeight / 50 + 5;
 				hole = {
 					radius: radius,
 					x: canvasWidth - 30,
 					y: canvasHeight - 30,
 					color: 'rgba(0, 0, 0, 255)',
-					color2: 'rgba(0, 255, 0, 255)'
+					color2: '#385D89'
 				};
+				reset();
+				
+				$("#btnPlay").click(function() {
+					if (!running) {
+						if (complete)
+							reset();
+						var ms = new Date().getTime() - timerMs;
+						window.setTimeout(startTimer, ms % 1000);
+					}
+				});
+				
+				$("#btnPause").click(function() {
+					if (running) {
+						if (timer) {
+							window.clearInterval(timer);
+							timer = false;
+						}
+						running = false;
+					}
+				});
+				
+				$("#btnStop").click(function() {
+					if (running || complete) {
+						if (timer) {
+							window.clearInterval(timer);
+							timer = false;
+						}
+						running = false;
+						reset();
+					}
+				});
 				
 				// TEST CODE
 				/*window.setInterval(function() {
-					updateScene({x: 0.2, y: 0.2})
+					updateScene({x: -0.2, y: 0.3})
 				}, 1000 / FRAMERATE);*/
+				
 				init = true;
+			}
+			
+			function randomizeHole() {
+				var x = canvasWidth * Math.random() + 1;
+				var y = canvasHeight * Math.random() + 1;
+				hole.x = x;
+				hole.y = y;
+			}
+			
+			function startTimer() {
+				running = true;
+				updateTimer();
+				if (timer) {
+					window.clearInterval(timer);
+					timer = false;
+				}
+				timer = window.setInterval(updateTimer, 1000);
+			}
+			
+			function updateTimer() {
+				if (running) {
+					++seconds;
+					timerMs = new Date().getTime();
+					var time = seconds.toString().toMMSS();
+					$("#timer").html(time);
+				}
+			}
+			
+			function reset() {
+				seconds = 0;
+				$("#timer").html("00:00");
+				ball.x = Math.round(canvasWidth / 2);
+				ball.y = Math.round(canvasHeight / 2);
+				randomizeHole();
+				draw();
 			}
 
 			// device APIs are available
@@ -100,7 +225,7 @@
 			}
 			
 			function updateScene(acceleration) {
-				if (!init)
+				if (!init || !running)
 					return;
 				
 				dx = acceleration.x;
@@ -130,7 +255,14 @@
 				var goalBottom = hole.y + hole.radius;
 				
 				if (left > goalLeft && right < goalRight && top > goalTop && bottom < goalBottom) {
-					alert("goal");
+					complete = true;
+					running = false;
+					window.clearInterval(timer);
+					timer = false;
+					ball.x = hole.x;
+					ball.y = hole.y;
+					draw();
+					alert("Congratulations, your time is " + seconds + "s");
 				}
 			}
 			
@@ -159,14 +291,17 @@
 				context.stroke();
 			}
 			
-			$(document).ready(function() {
+			/*$(document).ready(function() {
 				onDeviceReady();
-			});
+			});*/
 		</script>
 	</head>
 	<body>
+		<div id="timer"></div>
 		<canvas id="canvas"></canvas>
-		<div id="buttons"><input type="button" value="button1" /> <input type="button" value="button1" /> <input type="button" value="button1" /></div>
+		<div id="buttons">
+			<input type="button" value="PLAY" id="btnPlay" /><input type="button" value="PAUSE" id="btnPause" /><input type="button" value="STOP" id="btnStop" />
+		</div>
 	</body>
 </html>
 
