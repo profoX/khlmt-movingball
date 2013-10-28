@@ -92,8 +92,14 @@
 				
 				dx = acceleration.x;
 				dy = acceleration.y;
-				ball.x -= dx * sx;
-				ball.y += dy * sy;
+				if (dx > 0.12 || dy > 0.12) {
+					ball.x -= dx * sx;
+					ball.y += dy * sy;
+				}
+				
+				// Balls may not leave edge of canvas
+				ball.x = Math.min(canvasWidth - ball.radius, Math.max(ball.radius, ball.x));
+				ball.y = Math.min(canvasHeight - ball.radius, Math.max(ball.radius, ball.y));
 				
 				draw();
 				checkGoal();
@@ -116,26 +122,27 @@
 			}
 			
 			function draw() {
-				//console.log("draw");
-				//alert("draw");
 				var context = canvas.getContext('2d');
 				
+				// Clear
 				context.clearRect(0, 0, canvas.width, canvas.height);
 				
-				context.beginPath();
-				context.arc(ball.x, ball.y, ball.radius, 0, 2 * Math.PI, false);
-				context.fillStyle = ball.color;
-				context.fill();
-				context.lineWidth = 1;
-				context.strokeStyle = ball.color2;
-				context.stroke();
-				
+				// Draw goal
 				context.beginPath();
 				context.arc(hole.x, hole.y, hole.radius, 0, 2 * Math.PI, false);
 				context.fillStyle = hole.color;
 				context.fill();
 				context.lineWidth = 1;
 				context.strokeStyle = hole.color2;
+				context.stroke();
+				
+				// Draw ball
+				context.beginPath();
+				context.arc(ball.x, ball.y, ball.radius, 0, 2 * Math.PI, false);
+				context.fillStyle = ball.color;
+				context.fill();
+				context.lineWidth = 1;
+				context.strokeStyle = ball.color2;
 				context.stroke();
 			}
 			
