@@ -170,8 +170,8 @@
 			}
 			
 			function randomizeHole() {
-				var x = canvasWidth * Math.random() + 1;
-				var y = canvasHeight * Math.random() + 1;
+				var x = (canvasWidth - hole.radius * 2) * Math.random() + 1 + hole.radius;
+				var y = (canvasHeight - hole.radius * 2) * Math.random() + 1 + hole.radius;
 				hole.x = x;
 				hole.y = y;
 			}
@@ -270,7 +270,8 @@
 				var context = canvas.getContext('2d');
 				
 				// Clear
-				context.clearRect(0, 0, canvasWidth, canvasHeight);
+				context.fillStyle = "blue";
+				context.fillRect(0, 0, canvasWidth, canvasHeight);
 				
 				// Draw goal
 				context.beginPath();
