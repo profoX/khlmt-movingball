@@ -52,7 +52,7 @@
 				//alert('onError!');
 			}
 			
-			function updateScene(acceleration) {
+			/*function updateScene(acceleration) {
 				if (!init)
 					return;
 				
@@ -61,10 +61,11 @@
 				//ball.x += dx;
 				//ball.y += dy;
 				//draw();
-			}
+			}*/
 			
 			function draw() {
 				//console.log("draw");
+				alert("draw");
 				var context = canvas.getContext('2d');
 				
 				context.clearRect(0, 0, canvas.width, canvas.height);
@@ -92,7 +93,7 @@
 				canvas.height = $(window).height();
 				canvasWidth = canvas.width;
 				canvasHeight = canvas.height;
-				//alert(canvasWidth + "," + canvasHeight);
+				alert(canvasWidth + "," + canvasHeight);
 				var radius = canvasHeight / 50;
 				ball = {
 					radius: radius,
