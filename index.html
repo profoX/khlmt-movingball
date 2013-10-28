@@ -33,12 +33,10 @@
 		
 			// Wait for device API libraries to load
 			document.addEventListener("deviceready", onDeviceReady, false);
-
-			// device APIs are available
-			function onDeviceReady() {
-				var watchID = navigator.accelerometer.watchAcceleration(updateScene, onError, {frequency: 1000 / FRAMERATE});
-				
-				alert("here");
+			document.addEventListener("DOMContentLoaded", onDOMReady, false);
+			
+			function onDOMReady() {
+				alert("dom ready");
 				canvas = $("canvas")[0];
 				alert("there");
 				canvas.width = $(window).width();
@@ -65,7 +63,13 @@
 				};
 				
 				//window.setInterval(draw, 1000 / FRAMERATE);
-				init = true;
+				init = true;			}
+
+			// device APIs are available
+			function onDeviceReady() {
+				var watchID = navigator.accelerometer.watchAcceleration(updateScene, onError, {frequency: 1000 / FRAMERATE});
+				
+				alert("here");
 			}
 
 			// onSuccess: Get a snapshot of the current acceleration
