@@ -29,6 +29,7 @@
 			var canvasWidth, canvasHeight;
 			var canvas, ball, hole;
 			var dx, dy;
+			var sx = 5, sy = 5;
 			var init = false;
 		
 			// Wait for device API libraries to load
@@ -44,7 +45,7 @@
 				//alert("foo");
 				canvasWidth = canvas.width;
 				canvasHeight = canvas.height;
-				alert(canvasWidth + "," + canvasHeight);
+				//alert(canvasWidth + "," + canvasHeight);
 				var radius = canvasHeight / 50;
 				ball = {
 					radius: radius,
@@ -91,9 +92,27 @@
 				
 				dx = acceleration.x;
 				dy = acceleration.y;
-				ball.x += dx;
-				ball.y += dy;
+				ball.x -= dx * sx;
+				ball.y += dy * sy;
+				
 				draw();
+				checkGoal();
+			}
+			
+			function checkGoal() {
+				var left = ball.x - ball.radius;
+				var right = ball.x + ball.radius;
+				var top = ball.y - ball.radius;
+				var bottom = ball.y + ball.radius;
+				
+				var goalLeft = hole.x - hole.radius;
+				var goalRight = hole.x + hole.radius;
+				var goalTop = hole.y - hole.radius;
+				var goalBottom = hole.y + hole.radius;
+				
+				if (left > goalLeft && right < goalRight && top > goalTop && bottom < goalBottom) {
+					alert("goal");
+				}
 			}
 			
 			function draw() {
