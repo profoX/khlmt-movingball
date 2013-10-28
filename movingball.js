@@ -91,6 +91,9 @@ function onDOMReady() {
 		updateScene({x: -0.2, y: 0.3})
 	}, 1000 / FRAMERATE);*/
 	
+	// Separate draw timer because watchAcceleration might not suffice for fluid animation on some devices
+	window.setInterval(draw, 1000 / FRAMERATE);
+	
 	init = true;
 }
 
@@ -164,7 +167,7 @@ function updateScene(acceleration) {
 	ball.x = Math.min(canvasWidth - ball.radius, Math.max(ball.radius, ball.x));
 	ball.y = Math.min(canvasHeight - ball.radius, Math.max(ball.radius, ball.y));
 	
-	draw();
+	//draw();
 	checkGoal();
 }
 
