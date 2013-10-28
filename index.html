@@ -36,7 +36,36 @@
 
 			// device APIs are available
 			function onDeviceReady() {
-				//var watchID = navigator.accelerometer.watchAcceleration(updateScene, onError, {frequency: 1000 / FRAMERATE});
+				var watchID = navigator.accelerometer.watchAcceleration(updateScene, onError, {frequency: 1000 / FRAMERATE});
+				
+				alert("here");
+				canvas = $("canvas")[0];
+				alert("there");
+				canvas.width = $(window).width();
+				canvas.height = $(window).height();
+				alert("foo");
+				canvasWidth = canvas.width;
+				canvasHeight = canvas.height;
+				alert(canvasWidth + "," + canvasHeight);
+				var radius = canvasHeight / 50;
+				ball = {
+					radius: radius,
+					x: Math.round(canvasWidth / 2),
+					y: Math.round(canvasHeight / 2),
+					color: 'rgba(0, 255, 0, 255)',
+					color2: 'rgba(0, 0, 255, 255)'
+				};
+				radius = canvasHeight / 50 + 10;
+				hole = {
+					radius: radius,
+					x: canvasWidth - 30,
+					y: canvasHeight - 30,
+					color: 'rgba(0, 0, 0, 255)',
+					color2: 'rgba(0, 255, 0, 255)'
+				};
+				
+				window.setInterval(draw, 1000 / FRAMERATE);
+				init = true;
 			}
 
 			// onSuccess: Get a snapshot of the current acceleration
@@ -88,34 +117,7 @@
 			}
 			
 			$(document).ready(function() {
-				alert("here");
-				canvas = $("canvas")[0];
-				alert("there");
-				canvas.width = $(window).width();
-				canvas.height = $(window).height();
-				alert("foo");
-				canvasWidth = canvas.width;
-				canvasHeight = canvas.height;
-				alert(canvasWidth + "," + canvasHeight);
-				var radius = canvasHeight / 50;
-				ball = {
-					radius: radius,
-					x: Math.round(canvasWidth / 2),
-					y: Math.round(canvasHeight / 2),
-					color: 'rgba(0, 255, 0, 255)',
-					color2: 'rgba(0, 0, 255, 255)'
-				};
-				radius = canvasHeight / 50 + 10;
-				hole = {
-					radius: radius,
-					x: canvasWidth - 30,
-					y: canvasHeight - 30,
-					color: 'rgba(0, 0, 0, 255)',
-					color2: 'rgba(0, 255, 0, 255)'
-				};
-				
-				window.setInterval(draw, 1000 / FRAMERATE);
-				init = true;
+				onDeviceReady();
 			});
 		</script>
 	</head>
