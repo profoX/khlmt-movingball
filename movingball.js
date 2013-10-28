@@ -59,6 +59,7 @@ function onDOMReady() {
 		if (!running) {
 			if (complete)
 				reset();
+			complete = false;
 			var ms = new Date().getTime() - timerMs;
 			window.setTimeout(startTimer, ms % 1000);
 		}
